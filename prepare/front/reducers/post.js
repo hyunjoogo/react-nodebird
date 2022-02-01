@@ -11,7 +11,10 @@ export const initialState = {
       src: 'https://github.com/hyunjoogo/card-maker/blob/master/public/images/default_logo.png?raw=true',
     }, {
       src: 'https://github.com/hyunjoogo/card-maker/blob/master/public/images/default_logo.png?raw=true',
-    }],
+    },
+      {
+        src: 'https://github.com/hyunjoogo/card-maker/blob/master/public/images/default_logo.png?raw=true',
+      },],
     Comments: [{
       User: {
         nickname: '주주',
@@ -28,24 +31,36 @@ export const initialState = {
   postAdded: false,
 }
 
-const ADD_POST = 'ADD_POST';
-export const addPost = {
-  type: ADD_POST,
-}
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+export const addPost = (data) => ({
+  type: ADD_POST_REQUEST,
+  data
+});
 
 const dummyPost = {
   id: 2,
-  content: '헤로헤로'
+  content: '헤로헤로',
+  User: {
+    id:1,
+    nickname:'hyunjoo'
+  },
+  Images: [],
+  Comments: [],
 }
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_POST :
+    case ADD_POST_REQUEST :
+    case ADD_POST_SUCCESS :
       return {
         ...state,
         // 앞에 추가하면 최신순, 뒤에 추가하면 누적순
-        mainPosts: [dummyPost, ...state.mainPosts]
+        mainPosts: [dummyPost, ...state.mainPosts],
+        postAdded: true,
       }
+    case ADD_POST_FAILURE :
     default:
       return state;
   }
