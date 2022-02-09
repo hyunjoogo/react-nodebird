@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     collate: 'utf8_general_ci',
   });
   // `sequelize.define` also returns the model
-  console.log(Image === sequelize.models.Image); // true
-  Image.associate = (db) => {};
+  Image.associate = (db) => {
+    db.Image.belongsTo(db.Post);
+  };
   return Image;
 };

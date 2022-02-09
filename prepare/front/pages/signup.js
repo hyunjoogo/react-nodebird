@@ -61,7 +61,7 @@ const Signup = () => {
       </Head>
       <Form onFinish={onSubmit} style={{ padding: 10 }}>
         <div>
-          <label htmlFor="user-email">아이디</label>
+          <label htmlFor="user-email">이메일</label>
           <br />
           <Input name="user-email" value={email} required onChange={onChangeEmail} />
         </div>
