@@ -6,7 +6,7 @@ const { User } = require('../models');
 const router = express.Router();
 
 router.post('/login', (req, res, next) => {
-  passport.authenticate('', (err, user, info) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) {
       console.error(err);
       return next(err);
@@ -19,7 +19,7 @@ router.post('/login', (req, res, next) => {
         console.error(loginErr);
         return next(loginErr);
       }
-      return res.json(user);
+      return res.status(200).json(user);
     });
   })(req, res, next);
 });
@@ -45,6 +45,12 @@ router.post('/', async (req, res, next) => { // POST /user/
     console.error(error);
     next(error); // status 500
   }
+});
+
+router.post('/user/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.send('ok');
 });
 
 module.exports = router;
