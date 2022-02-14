@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { Post } = require('../models');
+const { Post, Image, Comment, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
@@ -13,7 +13,16 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
     });
     const fullPost = await Post.findOne({
       where: { id: post.id },
-      include: [{ model: Image }, { model: Comment }, { model: User }],
+      include: [{
+        model: Image,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: Comment,
+        attributes: ['id', 'nickname'],
+      }, {
+        model: User,
+        attributes: ['id', 'nickname'],
+      }],
     });
     res.status(201).send(fullPost);
   } catch (error) {
@@ -24,7 +33,9 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
 
 router.post('/:postId/comment', isLoggedIn, async (req, res, next) => { // POST /post/postId/comment
   try {
-    const post = await Post.findOne({ where: { id: req.params.postId } });
+    const post = await Post.findOne({
+      where: { id: req.params.postId },
+    });
     if (!post) {
       return res.status(403).send('존재하지 않는 게시글입니다.');
     }
