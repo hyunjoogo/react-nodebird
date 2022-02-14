@@ -45,7 +45,8 @@ function addPostAPI(data) {
 function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data);
-    console.log(action.data);
+    console.log('프론트 - 포스트한 데이터', action.data);
+    console.log('프론트 - result', result);
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
@@ -89,6 +90,7 @@ function* removePost(action) {
 }
 
 function addCommentAPI(data) {
+  console.log('사가', data);
   return axios.post(`/post/${data.postId}/comment`, data);
 }
 
