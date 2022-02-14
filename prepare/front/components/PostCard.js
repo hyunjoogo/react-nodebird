@@ -38,7 +38,7 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
-  console.log(post);
+  console.log('postCard userId 확인', post.UserId);
   return (
     <CardWrapper key={post.id}>
       <Card

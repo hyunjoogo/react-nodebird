@@ -1,9 +1,9 @@
 import produce from '../util/produce';
 
 export const initialState = {
-  myInfoLoading: false, // 유저정보 가져오기 시도중
-  myInfoDone: false,
-  myInfoError: null,
+  LoadMyInfoLoading: false, // 유저정보 가져오기 시도중
+  LoadMyInfoDone: false,
+  LoadMyInfoError: null,
   followLoading: false, // 팔로우 시도중
   followDone: false,
   followError: null,
@@ -79,18 +79,18 @@ export const logoutRequestAction = () => ({
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
     case LOAD_MY_INFO_REQUEST:
-      draft.myInfoLoading = true;
-      draft.myInfoDone = null;
-      draft.myInfoError = false;
+      draft.LoadMyInfoLoading = true;
+      draft.LoadMyInfoDone = null;
+      draft.LoadMyInfoError = false;
       break;
     case LOAD_MY_INFO_SUCCESS:
-      draft.myInfoLoading = false;
+      draft.LoadMyInfoLoading = false;
       draft.me = action.data;
-      draft.myInfoDone = true;
+      draft.LoadMyInfoDone = true;
       break;
     case LOAD_MY_INFO_FAILURE:
-      draft.myInfoLoading = false;
-      draft.myInfoError = action.error;
+      draft.LoadMyInfoLoading = false;
+      draft.LoadMyInfoError = action.error;
       break;
     case FOLLOW_REQUEST:
       draft.followLoading = true;
