@@ -9,9 +9,8 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   try {
     const post = await Post.create({
       content: req.body.content,
-      UserID: req.user.id, // 1
+      UserId: req.user.id, // 1
     });
-    console.log(req.user.id);
     // 그런데 model 만드는 과정에서 UserID가 사라져
     const fullPost = await Post.findOne({
       where: { id: post.id },
