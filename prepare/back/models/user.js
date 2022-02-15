@@ -2,6 +2,7 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', { // MySQL에는 users 테이블 생성
     // Model attributes are defined here
     // id가 기본적으로 들어있다.
+    // 자동적으로 카운팅되어서 올라간다.
     email: {
       type: DataTypes.STRING(30),
       allowNull: false, // 필수

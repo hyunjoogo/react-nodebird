@@ -26,7 +26,6 @@ function loadMyInfoAPI() {
 function* loadMyInfo(action) {
   try {
     const result = yield call(loadMyInfoAPI, action.data);
-    console.log(result);
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
       data: result.data,
