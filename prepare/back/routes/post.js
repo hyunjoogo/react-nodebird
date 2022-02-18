@@ -5,6 +5,7 @@ const router = express.Router();
 const { Post, Image, Comment, User } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
+// 게시글 작성
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
   try {
     const post = await Post.create({
@@ -36,7 +37,7 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /post
     next(error); // status 500
   }
 });
-
+// 답글 작성
 router.post('/:postId/comment', isLoggedIn, async (req, res, next) => { // POST /post/postId/comment
   try {
     const post = await Post.findOne({
@@ -63,9 +64,10 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => { // POST 
     next(error); // status 500
   }
 });
-
+// 게시글 좋아요
 router.patch('/:postId/like', isLoggedIn, async (req, res, next) => { // PATCH /post/1/like
   try {
+    // 개시글이 있는지 확인
     const post = await Post.findOne({ where: { id: req.params.postId } });
     if (!post) {
       return res.status(403).send('존재하지 않는 게시글입니다.');
@@ -77,7 +79,7 @@ router.patch('/:postId/like', isLoggedIn, async (req, res, next) => { // PATCH /
     next(error); // status 500
   }
 });
-
+// 게시글 좋아요 취소
 router.delete('/:postId/like', isLoggedIn, async (req, res, next) => { // DELETE /post/1/like
   try {
     const post = await Post.findOne({ where: { id: req.params.postId } });
@@ -86,6 +88,29 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => { // DELETE
     }
     await post.removeLikers(req.user.id);
     res.json({ PostId: post.id, UserId: req.user.id });
+  } catch (error) {
+    console.error(error);
+    next(error); // status 500
+  }
+});
+
+
+// 게시글 삭제
+router.delete('/:postId', isLoggedIn, async (req, res, next) => { // DELETE /post/1
+  try {
+    // 게시글이 존재하는가?
+    const post = await Post.findOne({ where: { id: req.params.postId } });
+    if (!post) {
+      return res.status(403).send('존재하지 않는 게시글입니다.');
+    }
+    // 해당 게시글 삭제
+    await Post.destroy({
+      where: {
+        id: req.params.postId,
+        UserId: req.user.id,
+      },
+    });
+    res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
   } catch (error) {
     console.error(error);
     next(error); // status 500
