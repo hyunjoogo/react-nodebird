@@ -1,11 +1,18 @@
 const express = require('express');
+const { Op } = require('sequelize');
+
 const { Post, Image, User, Comment } = require('../models');
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => { // GET /posts
   try {
+    const where = {};
+    if (parseInt(req.query.lastId, 10)) { // 초기 로딩이 아닐 때
+      where.id = { [Op.lt]: parseInt(req.query.lastId, 10) };
+    }
     const posts = await Post.findAll({
+      where,
       limit: 10,
       order: [
         ['createdAt', 'DESC'],
@@ -26,6 +33,15 @@ router.get('/', async (req, res, next) => { // GET /posts
         model: User, // 좋아요 누른사람
         as: 'Likers', // model에서 관계형 정의할 때 설정한 이름
         attributes: ['id'],
+      }, {
+        model: Post,
+        as: 'Retweet',
+        include: [{
+          model: User,
+          attributes: ['id', 'nickname'],
+        }, {
+          model: Image,
+        }],
       }],
     });
     res.status(200).json(posts);
